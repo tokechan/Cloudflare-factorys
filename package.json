@@ -52,6 +52,9 @@
 			"better-sqlite3",
 			"esbuild",
 			"workerd"
-		]
+		],
+		"overrides": {
+			"@cloudflare/kumo": "1.16.0"
+		}
 	}
 }
