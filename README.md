@@ -13,7 +13,7 @@ npm create emdash@latest
 
 Or deploy directly to your Cloudflare account:
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/emdash-cms/templates/tree/main/blog-cloudflare)
+[Deploy to Cloudflare](https://deploy.workers.cloudflare.com/?url=https://github.com/emdash-cms/templates/tree/main/blog-cloudflare)
 
 EmDash runs on Cloudflare (D1 + R2 + Workers) or any Node.js server with SQLite. No PHP, no separate hosting tier -- just deploy your Astro site.
 
@@ -21,13 +21,13 @@ EmDash runs on Cloudflare (D1 + R2 + Workers) or any Node.js server with SQLite.
 
 EmDash ships with three starter templates:
 
-<table>
-<tr>
-<td width="33%" valign="top">
+
+|     |
+| --- |
+|     |
+
 
 ### Blog
-
-<a href="assets/templates/blog/latest/"><img src="assets/templates/blog/latest/homepage-light-desktop.jpg" alt="Blog template" width="100%"></a>
 
 A classic blog with sidebar widgets, search, and RSS.
 
@@ -37,12 +37,7 @@ A classic blog with sidebar widgets, search, and RSS.
 - RSS feed
 - Dark / light mode
 
-</td>
-<td width="33%" valign="top">
-
 ### Marketing
-
-<a href="assets/templates/marketing/latest/"><img src="assets/templates/marketing/latest/homepage-light-desktop.jpg" alt="Marketing template" width="100%"></a>
 
 A conversion-focused landing page with pricing and contact form.
 
@@ -52,12 +47,7 @@ A conversion-focused landing page with pricing and contact form.
 - FAQ and contact form
 - Dark / light mode
 
-</td>
-<td width="33%" valign="top">
-
 ### Portfolio
-
-<a href="assets/templates/portfolio/latest/"><img src="assets/templates/portfolio/latest/work-light-desktop.jpg" alt="Portfolio template" width="100%"></a>
 
 A visual portfolio for showcasing creative work.
 
@@ -66,10 +56,6 @@ A visual portfolio for showcasing creative work.
 - Case study pages
 - RSS feed
 - Dark / light mode
-<br /><br />
-</td>
-</tr>
-</table>
 
 ## Why EmDash?
 
@@ -147,12 +133,14 @@ const { entries: posts } = await getEmDashCollection("posts");
 
 ## Portable Platforms
 
+
 | Layer    | Cloudflare                  | Also works with                                     |
 | -------- | --------------------------- | --------------------------------------------------- |
 | Database | D1                          | SQLite, Turso/libSQL, PostgreSQL                    |
 | Storage  | R2                          | AWS S3, any S3-compatible service, local filesystem |
 | Sessions | KV                          | Redis, file-based                                   |
 | Plugins  | Worker isolates (sandboxed) | In-process (safe mode)                              |
+
 
 ## Status
 
@@ -181,7 +169,7 @@ pnpm --filter emdash-demo seed
 pnpm --filter emdash-demo dev
 ```
 
-Open the admin at [http://localhost:4321/\_emdash/admin](http://localhost:4321/_emdash/admin).
+Open the admin at [http://localhost:4321/emdash/admin](http://localhost:4321/_emdash/admin).
 
 ```bash
 pnpm test          # run all tests
@@ -208,3 +196,4 @@ templates/        Starter templates (blog, marketing, portfolio, starter, blank)
 demos/            Development and example sites
 docs/             Documentation site (Starlight)
 ```
+

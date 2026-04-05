@@ -1,11 +1,13 @@
 import type { APIRoute } from "astro";
-import { getEmDashCollection } from "emdash";
+import { getEmDashCollection, getSiteSettings } from "emdash";
 
-const siteTitle = "My Blog";
-const siteDescription = "A blog about software, design, and the occasional stray thought.";
+const TRAILING_SLASH_RE = /\/$/;
 
 export const GET: APIRoute = async ({ site, url }) => {
-	const siteUrl = site?.toString() || url.origin;
+	const settings = await getSiteSettings();
+	const siteTitle = settings.title ?? "tokechan.com";
+	const siteDescription = settings.tagline ?? "Web、Cloudflare、開発の技術メモ";
+	const siteUrl = settings.url?.replace(TRAILING_SLASH_RE, "") || site?.toString() || url.origin;
 
 	const { entries: posts } = await getEmDashCollection("posts", {
 		orderBy: { published_at: "desc" },

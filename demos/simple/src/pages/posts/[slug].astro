@@ -4,6 +4,7 @@ import {
 	getEmDashCollection,
 	getEntryTerms,
 	getSeoMeta,
+	getSiteSettings,
 } from "emdash";
 import {
 	Image,
@@ -15,6 +16,8 @@ import {
 import Base from "../../layouts/Base.astro";
 import PostCard from "../../components/PostCard.astro";
 import { getReadingTime } from "../../utils/reading-time";
+
+const TRAILING_SLASH_RE = /\/$/;
 
 const { slug } = Astro.params;
 
@@ -30,16 +33,20 @@ if (!post) {
 
 Astro.cache.set(cacheHint);
 
+const settings = await getSiteSettings();
+const siteBaseUrl =
+	settings.url?.replace(TRAILING_SLASH_RE, "") || Astro.url.origin;
+
 // Get featured image URL for OG fallback
 // The image may have src (external) or meta.storageKey (local)
-function getImageUrl(img: unknown): string | undefined {
+function getImageUrl(img: unknown, origin: string): string | undefined {
 	if (!img || typeof img !== "object") return undefined;
 	const image = img as Record<string, unknown>;
 	// Check for direct src
 	if (typeof image.src === "string" && image.src) {
 		return image.src.startsWith("http")
 			? image.src
-			: `${Astro.url.origin}${image.src}`;
+			: `${origin}${image.src}`;
 	}
 	// Build from storageKey for local images
 	const meta = image.meta as Record<string, unknown> | undefined;
@@ -47,16 +54,16 @@ function getImageUrl(img: unknown): string | undefined {
 		(typeof meta?.storageKey === "string" ? meta.storageKey : undefined) ||
 		(typeof image.id === "string" ? image.id : undefined);
 	if (storageKey) {
-		return `${Astro.url.origin}/_emdash/api/media/file/${storageKey}`;
+		return `${origin}/_emdash/api/media/file/${storageKey}`;
 	}
 	return undefined;
 }
-const featuredImageUrl = getImageUrl(post.data.featured_image);
+const featuredImageUrl = getImageUrl(post.data.featured_image, siteBaseUrl);
 
 // Generate SEO meta from content
 const seo = getSeoMeta(post, {
-	siteTitle: "My Blog",
-	siteUrl: Astro.url.origin,
+	siteTitle: settings.title ?? "tokechan.com",
+	siteUrl: siteBaseUrl,
 	path: `/posts/${slug}`,
 	defaultOgImage: featuredImageUrl,
 });

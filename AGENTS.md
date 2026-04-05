@@ -2,7 +2,7 @@ This file provides guidance to agentic coding tools when working with code in th
 
 ## Project Status
 
-**Beta.** EmDash is published to npm. All development happens inside this monorepo using `workspace:*` links. See [CONTRIBUTING.md](CONTRIBUTING.md) for the human-readable contributor guide (setup, repo layout, "build your own site" workflow).
+**Beta.** EmDash is published to npm. All development happens inside this monorepo using `workspace:`* links. See [CONTRIBUTING.md](CONTRIBUTING.md) for the human-readable contributor guide (setup, repo layout, "build your own site" workflow).
 
 ## Repository Structure
 
@@ -131,13 +131,15 @@ EmDash is an Astro-native CMS that stores its schema in the database, not in cod
 
 ## Key Files
 
+
 | File                                | Purpose                                               |
 | ----------------------------------- | ----------------------------------------------------- |
 | `src/live.config.ts`                | Collection schemas + admin config (user's site)       |
 | `src/emdash-runtime.ts`             | Central runtime; orchestrates DB, plugins, storage    |
-| `src/schema/registry.ts`            | Manages `ec_*` table creation/modification            |
+| `src/schema/registry.ts`            | Manages `ec_`* table creation/modification            |
 | `src/database/migrations/runner.ts` | StaticMigrationProvider; register new migrations here |
 | `src/plugins/manager.ts`            | Loads and orchestrates trusted plugins                |
+
 
 ## Code Patterns
 
@@ -147,7 +149,7 @@ Kysely is the query builder. Use it properly:
 
 - **Never** use `sql.raw()` with string interpolation or template literals containing variables.
 - **Never** build SQL strings with `+` or backtick interpolation and pass them to `sql.raw()`.
-- For **values**, use Kysely's `sql` tagged template: `` sql`SELECT * FROM t WHERE id = ${id}` `` -- interpolated values are automatically parameterized.
+- For **values**, use Kysely's `sql` tagged template: `sql`SELECT * FROM t WHERE id = ${id}`` -- interpolated values are automatically parameterized.
 - For **identifiers** (table/column names), use `sql.ref()` which quotes them safely.
 - If you absolutely must use `sql.raw()` for dynamic identifiers, validate them first with `validateIdentifier()` from `database/validate.ts` which asserts `/^[a-z][a-z0-9_]*$/`.
 - The `json_extract(data, '$.${field}')` pattern is particularly dangerous -- always validate `field` before interpolation.
@@ -277,12 +279,12 @@ Migrations live in `packages/core/src/database/migrations/`. Conventions:
 - **Naming:** `NNN_descriptive_name.ts` -- zero-padded 3-digit sequential number.
 - **Exports:** Each migration exports `up(db: Kysely<unknown>)` and `down(db: Kysely<unknown>)`.
 - **System tables** use Kysely's schema builder (`db.schema.createTable(...)`).
-- **Dynamic content tables** (`ec_*`) use `sql` tagged templates with `sql.ref()` for identifiers.
-- **Column types:** SQLite types -- `"text"`, `"integer"`, `"real"`, `"blob"`. Booleans are `"integer"` with `defaultTo(0)`. Timestamps are `"text"` with ``defaultTo(sql`(datetime('now'))`)``. IDs are `"text"` primary keys (ULIDs from `ulidx`).
+- **Dynamic content tables** (`ec_`*) use `sql` tagged templates with `sql.ref()` for identifiers.
+- **Column types:** SQLite types -- `"text"`, `"integer"`, `"real"`, `"blob"`. Booleans are `"integer"` with `defaultTo(0)`. Timestamps are `"text"` with `defaultTo(sql`(datetime('now'))`)`. IDs are `"text"` primary keys (ULIDs from `ulidx`).
 - **Index naming:** `idx_{table}_{column}` for single-column, `idx_{table}_{purpose}` for multi-column.
 - **Foreign keys** must always have an accompanying index.
 - **Registration:** Migrations are statically imported in `database/runner.ts` and added to the `StaticMigrationProvider`. They are NOT auto-discovered -- this is required for Workers bundler compatibility. When adding a migration: (1) create the file, (2) add a static import in `runner.ts`, (3) add it to `getMigrations()`.
-- **Multi-table migrations:** When altering all content tables, query `_emdash_collections` to discover `ec_*` tables and loop. See `013_scheduled_publishing.ts` for the pattern.
+- **Multi-table migrations:** When altering all content tables, query `_emdash_collections` to discover `ec_`* tables and loop. See `013_scheduled_publishing.ts` for the pattern.
 
 ### API Route Structure
 
@@ -402,7 +404,7 @@ Dynamic content tables are managed by `SchemaRegistry` in `schema/registry.ts`:
 - **Slug validation:** `/^[a-z][a-z0-9_]*$/`, max 63 chars. Checked against `RESERVED_COLLECTION_SLUGS` and `RESERVED_FIELD_SLUGS`.
 - **Standard columns:** Every content table gets `id`, `slug`, `status`, `author_id`, `created_at`, `updated_at`, `published_at`, `scheduled_at`, `deleted_at`, `version`, `live_revision_id`, `draft_revision_id`. User-defined field columns are added via `ALTER TABLE`.
 - **Field type mapping:** `FIELD_TYPE_TO_COLUMN` maps: string/text/datetime/image/reference -> TEXT, number -> REAL, integer/boolean -> INTEGER, portableText/json -> JSON.
-- **Orphan discovery:** `discoverOrphanedTables()` finds `ec_*` tables without matching `_emdash_collections` entries. This is used for recovering from crashes during schema changes.
+- **Orphan discovery:** `discoverOrphanedTables()` finds `ec_`* tables without matching `_emdash_collections` entries. This is used for recovering from crashes during schema changes.
 
 ### Testing
 

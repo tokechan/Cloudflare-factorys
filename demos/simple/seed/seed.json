@@ -2,14 +2,15 @@
 	"$schema": "https://emdashcms.com/seed.schema.json",
 	"version": "1",
 	"meta": {
-		"name": "Blog Starter",
-		"description": "A blog with posts and pages",
-		"author": "EmDash"
+		"name": "tokechan.com",
+		"description": "Tokechan の技術ブログ（Web / Cloudflare / 開発メモ）",
+		"author": "Tokechan"
 	},
 
 	"settings": {
-		"title": "My Blog",
-		"tagline": "Thoughts on building for the web"
+		"title": "tokechan.com",
+		"tagline": "Web、Cloudflare、開発の技術メモ",
+		"url": "https://tokechan.com"
 	},
 
 	"collections": [

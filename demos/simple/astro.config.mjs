@@ -6,6 +6,7 @@ import emdash, { local } from "emdash/astro";
 import { sqlite } from "emdash/db";
 
 export default defineConfig({
+	site: "https://tokechan.com",
 	output: "server",
 	adapter: node({
 		mode: "standalone",
